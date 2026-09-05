@@ -971,3 +971,42 @@ footer,
 [data*="netlify"] {
     display: none !important;
 }
+/* ==========================================
+   إخفاء شعار Netlify نهائياً
+   ========================================== */
+
+/* إخفاء أي عنصر يحمل شعار Netlify */
+div[data-netlify-badge],
+footer[data-netlify-badge],
+.netlify-badge,
+[class*="netlify-badge"],
+[class*="netlify-footer"],
+iframe[src*="netlify"],
+img[src*="netlify-badge"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute !important;
+    z-index: -9999 !important;
+}
+
+/* إخفاء جميع عناصر التذييل والعلامات */
+footer,
+.badge,
+.banner,
+.notification,
+.toast,
+[role="banner"],
+[aria-label*="Netlify"] {
+    display: none !important;
+}
+
+/* إخفاء أي عنصر فيه كلمة netlify */
+[class*="netlify"],
+[id*="netlify"],
+[data*="netlify"] {
+    display: none !important;
+}
