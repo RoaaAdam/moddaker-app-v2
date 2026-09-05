@@ -1256,4 +1256,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+// إخفاء شعار Netlify نهائياً
+setTimeout(() => {
+    const elements = document.querySelectorAll('div, footer, iframe, img, aside, section');
+    elements.forEach(el => {
+        const html = el.outerHTML || '';
+        const text = el.textContent || '';
+        if (html.includes('netlify') || html.includes('Netlify') || text.includes('Netlify')) {
+            el.style.display = 'none';
+            el.style.visibility = 'hidden';
+            el.style.opacity = '0';
+            el.style.height = '0';
+            el.style.width = '0';
+            el.style.position = 'absolute';
+            el.style.zIndex = '-9999';
+        }
+    });
+}, 500);
 });

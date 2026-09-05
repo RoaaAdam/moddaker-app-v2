@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d9488">
+    <style>
+        /* إخفاء شعار Netlify نهائياً */
+        div[data-netlify-badge],
+        .netlify-badge,
+        img[src*="netlify-badge"],
+        iframe[src*="netlify"],
+        footer,
+        .footer,
+        [class*="netlify"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            width: 0 !important;
+            position: absolute !important;
+            z-index: -9999 !important;
+        }
+    </style>
 </head>
 <body>
 
