@@ -954,27 +954,3 @@ button {
     min-height: 100px;
     font-family: 'Cairo', sans-serif;
 }
-/* إخفاء شعار Netlify نهائياً */
-div[data-netlify-badge],
-footer[data-netlify-badge],
-.netlify-badge,
-[class*="netlify-badge"],
-[class*="netlify-footer"],
-iframe[src*="netlify"],
-img[src*="netlify-badge"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    height: 0 !important;
-    width: 0 !important;
-    position: absolute !important;
-    z-index: -9999 !important;
-}
-
-/* إخفاء أي عنصر يحمل شعار Netlify */
-.footer,
-.site-footer,
-.app-footer {
-    display: none !important;
-}
