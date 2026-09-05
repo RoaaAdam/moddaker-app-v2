@@ -954,3 +954,20 @@ button {
     min-height: 100px;
     font-family: 'Cairo', sans-serif;
 }
+/* إخفاء جميع عناصر التذييل والعلامات */
+footer,
+.badge,
+.banner,
+.notification,
+.toast,
+[role="banner"],
+[aria-label*="Netlify"] {
+    display: none !important;
+}
+
+/* إخفاء أي عنصر فيه كلمة netlify */
+[class*="netlify"],
+[id*="netlify"],
+[data*="netlify"] {
+    display: none !important;
+}
