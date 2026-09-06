@@ -30,15 +30,7 @@ body.dark-mode {
     margin: 0; 
     padding: 0; 
 }
-/* إخفاء علامة Netlify */
-.footer {
-    display: none !important;
-}
 
-/* أو إخفاء أي عنصر يحمل شعار Netlify */
-[data-netlify-badge] {
-    display: none !important;
-}
 html {
     font-size: var(--font-base);
 }
@@ -65,6 +57,21 @@ html, body {
     .navbar .logo {
         font-size: 1.2rem;
     }
+    .modal-card {
+        padding: 1rem;
+    }
+    .options-grid .option-btn {
+        font-size: 0.95rem;
+        padding: 0.7rem 1rem;
+    }
+    .result-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .result-btn {
+        width: 100%;
+        min-width: unset;
+    }
 }
 
 @media (max-width: 768px) {
@@ -79,11 +86,28 @@ html, body {
         max-height: 150px;
     }
     .checkbox-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
     .modal-card {
         width: 95%;
         padding: 1rem;
+    }
+    .actions {
+        flex-direction: column;
+    }
+    .actions button {
+        width: 100%;
+    }
+    .navbar {
+        padding: 0 0.8rem;
+    }
+    .result-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .result-btn {
+        flex: 1;
+        min-width: 120px;
     }
 }
 
@@ -106,7 +130,7 @@ button:hover .arrow-icon {
 .navbar { 
     background-color: var(--bg-color);
     height: 60px;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -187,6 +211,23 @@ button:hover .arrow-icon {
     font-size: 0.85rem; 
     color: var(--secondary-color); 
     font-weight: bold; 
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.login-indicator {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 4px;
+}
+
+.login-indicator:hover {
+    transform: scale(1.1);
+    color: var(--primary-light);
 }
 
 .menu-divider { 
@@ -224,7 +265,7 @@ button:hover .arrow-icon {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 1.5rem;
     min-height: calc(100vh - 60px);
 }
 
@@ -265,10 +306,16 @@ button:hover .arrow-icon {
 .onboarding-slide { 
     display: none; 
     text-align: center; 
+    animation: fadeSlide 0.5s ease;
 }
 
 .onboarding-slide.active { 
     display: block; 
+}
+
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .feature-list { 
@@ -352,6 +399,7 @@ button:hover .arrow-icon {
     height: 8px; 
     border-radius: 50%; 
     background: #cbd5e1; 
+    transition: all 0.3s ease;
 }
 
 .dot.active { 
@@ -407,11 +455,18 @@ button:hover .arrow-icon {
     gap: 0.5rem; 
 }
 
-@media (max-width: 480px) {
-    .items-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        max-height: 150px;
-    }
+.items-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.items-grid::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+.items-grid::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
 }
 
 /* ===== حقل الأرقام المخصص ===== */
@@ -450,6 +505,7 @@ button:hover .arrow-icon {
     width: 68px; 
     padding: 0 !important; 
     font-weight: bold; 
+    background: transparent;
 }
 
 /* ===== الشيك بوكس المخصص ===== */
@@ -491,12 +547,6 @@ button:hover .arrow-icon {
     gap: 8px; 
 }
 
-@media (max-width: 480px) {
-    .checkbox-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    }
-}
-
 .checkbox-card { 
     display: flex; 
     align-items: center; 
@@ -508,6 +558,11 @@ button:hover .arrow-icon {
     font-weight: 600; 
     cursor: pointer; 
     transition: all 0.2s ease; 
+}
+
+.checkbox-card:hover {
+    border-color: var(--primary-color);
+    background: rgba(13, 92, 58, 0.03);
 }
 
 /* ===== شريط الصعوبة ===== */
@@ -557,6 +612,10 @@ button:hover .arrow-icon {
     transition: background-color 0.15s linear, transform 0.15s ease; 
 }
 
+#difficulty-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
 #difficulty-slider::-moz-range-thumb {
     width: 26px;
     height: 26px;
@@ -565,7 +624,6 @@ button:hover .arrow-icon {
     border: 3px solid #ffffff;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    transition: background-color 0.15s linear;
 }
 
 /* ===== إعدادات المؤقت ===== */
@@ -646,11 +704,15 @@ button:hover .arrow-icon {
     cursor: pointer;
     transition: all 0.2s ease;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.option-btn:hover { 
+.option-btn:hover:not(:disabled) { 
     border-color: var(--primary-color); 
     background: rgba(13, 92, 58, 0.03); 
+    transform: translateX(-4px);
 }
 
 .option-btn:disabled {
@@ -679,6 +741,12 @@ label {
     font-family: 'Cairo', sans-serif; 
     background: var(--card-bg); 
     color: var(--text-color); 
+    transition: border-color 0.2s;
+}
+
+.input-styled:focus {
+    border-color: var(--primary-color);
+    outline: none;
 }
 
 .actions { 
@@ -700,6 +768,7 @@ button {
     align-items: center; 
     justify-content: center; 
     transition: all 0.25s ease;
+    gap: 6px;
 }
 
 .btn-primary { 
@@ -712,6 +781,13 @@ button {
 .btn-primary:hover { 
     background: var(--primary-light); 
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 92, 58, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .btn-secondary { 
@@ -724,6 +800,34 @@ button {
 .btn-secondary:hover {
     background: #475569;
     transform: translateY(-2px);
+}
+
+/* ===== أزرار نهاية الاختبار ===== */
+.result-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.result-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* ===== رأس الاختبار ===== */
@@ -810,6 +914,12 @@ button {
     font-weight: bold; 
     cursor: pointer; 
     width: auto; 
+    transition: all 0.2s;
+}
+
+.btn-feedback-trigger:hover {
+    background: var(--primary-color);
+    color: white;
 }
 
 /* ===== النوافذ المنبثقة ===== */
@@ -838,6 +948,12 @@ button {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
+    animation: modalPop 0.3s ease;
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .modal-header { 
@@ -862,6 +978,11 @@ button {
     color: var(--text-color); 
     width: auto; 
     padding: 0 8px;
+    transition: transform 0.2s;
+}
+
+.close-btn:hover {
+    transform: rotate(90deg);
 }
 
 .modal-body { 
@@ -954,53 +1075,35 @@ button {
     min-height: 100px;
     font-family: 'Cairo', sans-serif;
 }
-/* إخفاء جميع عناصر التذييل والعلامات */
-footer,
-.badge,
-.banner,
-.notification,
-.toast,
-[role="banner"],
-[aria-label*="Netlify"] {
-    display: none !important;
-}
 
-/* إخفاء أي عنصر فيه كلمة netlify */
-[class*="netlify"],
-[id*="netlify"],
-[data*="netlify"] {
-    display: none !important;
-}
 /* ==========================================
    إخفاء شعار Netlify نهائياً
    ========================================== */
-
-/* إخفاء أي عنصر يحمل شعار Netlify */
 div[data-netlify-badge],
 footer[data-netlify-badge],
 .netlify-badge,
 [class*="netlify-badge"],
 [class*="netlify-footer"],
 iframe[src*="netlify"],
-img[src*="netlify-badge"] {
+img[src*="netlify-badge"],
+img[src*="netlify"],
+[data-netlify-badge] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
-    pointer-events: none !important;
     height: 0 !important;
     width: 0 !important;
     position: absolute !important;
     z-index: -9999 !important;
+    pointer-events: none !important;
 }
 
-/* إخفاء جميع عناصر التذييل والعلامات */
+/* إخفاء جميع عناصر التذييل */
 footer,
-.badge,
-.banner,
-.notification,
-.toast,
-[role="banner"],
-[aria-label*="Netlify"] {
+.footer,
+.site-footer,
+.app-footer,
+[role="contentinfo"] {
     display: none !important;
 }
 
@@ -1009,59 +1112,4 @@ footer,
 [id*="netlify"],
 [data*="netlify"] {
     display: none !important;
-}
-/* ==========================================
-   تنسيق أزرار نهاية الاختبار
-   ========================================== */
-   .result-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    justify-content: center;
-    align-items: center;
-}
-
-.result-btn {
-    flex: 1;
-    min-width: 140px;
-    padding: 0.8rem 1.2rem;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.result-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* تنسيق أيقونة تسجيل الدخول */
-.login-indicator {
-    margin-right: 8px;
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.login-indicator:hover {
-    transform: scale(1.1);
-    color: var(--primary-light);
-}
-
-/* للهواتف */
-@media (max-width: 480px) {
-    .result-actions {
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-    .result-btn {
-        width: 100%;
-        min-width: unset;
-    }
 }
