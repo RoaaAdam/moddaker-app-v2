@@ -269,20 +269,26 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const nameVal = nameInput ? nameInput.value.trim() : "";
             const emailVal = emailInput ? emailInput.value.trim() : "";
-
+    
             if (nameVal) {
                 currentUser = nameVal;
                 currentUserEmail = emailVal;
                 if (emailVal) await loadUserDataFromCloud(emailVal);
                 saveUserData();
-
+    
                 loginFormBox.classList.add("hidden");
                 loginFormBox.style.display = 'none';
                 const guestBox = document.getElementById("guest-mode-box");
                 if (guestBox) guestBox.classList.remove("hidden");
                 alert(`مرحباً بك ${currentUser}! تم المزامنة بنجاح.`);
+                
+                // ✅ الانتقال مباشرة لصفحة إعداد الاختبار
+                if (step1) step1.classList.add("hidden");
+                if (step2) step2.classList.remove("hidden");
+                if (allSurahs.length === 0) fetchSurahsList();
             }
         });
+    }
     }
   
 

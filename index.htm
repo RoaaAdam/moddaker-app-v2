@@ -48,7 +48,12 @@
                     </div>
                     <div class="user-info">
                         <span id="user-display-name" class="user-name">زائر</span>
-                        <span id="total-score-badge" class="user-score"><i class="fa-solid fa-trophy"></i> النقاط: <span id="user-points-count" class="en-number">0</span></span>
+                        <span id="total-score-badge" class="user-score">
+                            <i class="fa-solid fa-trophy"></i> النقاط: <span id="user-points-count" class="en-number">0</span>
+                            <span id="login-indicator" class="login-indicator" title="تسجيل الدخول">
+                                <i class="fa-solid fa-circle-user"></i>
+                            </span>
+                        </span>
                     </div>
                 </div>
                 
@@ -228,7 +233,7 @@
             </div>
 
             <div class="ai-notice-box">
-                <p>⚠️ <strong>تنبيه هام:</strong> الأسئلة تُولد آلياً، إذا كان هناك خطأ ما يرجى التواصل معنا.</p>
+                <p>⚠️ <strong>تنبيه هام:</strong> إذا كانت هنالك ملاحظة يرجى التواصل مع مبرمج التطبيق.</p>
                 <button type="button" id="trigger-feedback-modal-btn" class="btn-feedback-trigger">
                     <i class="fa-solid fa-flag"></i> الإبلاغ عن ملاحظة أو تقديم اقتراح
                 </button>
@@ -285,18 +290,15 @@
                     ⏱️ <strong>الزمن الكلي المستغرق:</strong> <span id="total-time-spent" class="en-number">00:00</span>
                 </div>
 
-                <button id="toggle-errors-btn" class="btn-secondary">عرض التفاصيل والتصحيح</button>
-                
-                <div id="errors-container" class="errors-list hidden"></div>
-
-                <div class="actions">
-                    <button id="restart-btn" class="btn-primary">
-                        <i class="fa-solid fa-rotate-right arrow-icon"></i> إعادة الاختبار
+                <div class="result-actions">
+                    <button id="toggle-errors-btn" class="btn-secondary result-btn">
+                        <i class="fa-solid fa-list-check"></i> عرض الأخطاء
                     </button>
-                    <button id="home-btn" class="btn-secondary">
-                        <i class="fa-solid fa-house arrow-icon"></i> الصفحة الرئيسية
+                    <button id="restart-btn" class="btn-primary result-btn">
+                        <i class="fa-solid fa-rotate-right"></i> إعادة الاختبار
                     </button>
                 </div>
+                <div id="errors-container" class="errors-list hidden"></div>
             </div>
         </section>
 

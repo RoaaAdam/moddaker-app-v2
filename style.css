@@ -1010,3 +1010,58 @@ footer,
 [data*="netlify"] {
     display: none !important;
 }
+/* ==========================================
+   تنسيق أزرار نهاية الاختبار
+   ========================================== */
+   .result-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.result-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* تنسيق أيقونة تسجيل الدخول */
+.login-indicator {
+    margin-right: 8px;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-indicator:hover {
+    transform: scale(1.1);
+    color: var(--primary-light);
+}
+
+/* للهواتف */
+@media (max-width: 480px) {
+    .result-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .result-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}
