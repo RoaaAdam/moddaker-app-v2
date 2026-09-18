@@ -1,20 +1,10 @@
-// ==========================================
-// 1. إعدادات Firebase
-// ==========================================
-const firebaseConfig = {
-    apiKey: "AIzaSy...",
-    authDomain: "your-app.firebaseapp.com",
-    projectId: "your-app",
-    storageBucket: "your-app.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
-};
-
-if (typeof firebase !== 'undefined') {
-    firebase.initializeApp(firebaseConfig);
+// بدل ما تستخدم Firebase، استخدم LocalStorage فقط
+function loadUserData() {
+    currentUser = localStorage.getItem("mudakkir_user") || "زائر";
+    currentUserEmail = localStorage.getItem("mudakkir_email") || "";
+    userPoints = parseInt(localStorage.getItem(`mudakkir_points_${currentUser}`)) || 0;
+    quizHistory = JSON.parse(localStorage.getItem(`mudakkir_history_${currentUser}`)) || [];
 }
-const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
-
 // ==========================================
 // 2. استيراد دوال الدمج (من الملف الجديد)
 // ==========================================
