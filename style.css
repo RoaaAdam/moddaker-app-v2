@@ -177,7 +177,7 @@ button:hover .arrow-icon {
     position: absolute;
     left: 0;
     top: 50px;
-    width: 250px;
+    width: 270px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -217,19 +217,6 @@ button:hover .arrow-icon {
     flex-wrap: wrap;
 }
 
-.login-indicator {
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 4px;
-}
-
-.login-indicator:hover {
-    transform: scale(1.1);
-    color: var(--primary-light);
-}
-
 .menu-divider { 
     border: none; 
     border-top: 1px solid var(--border-color); 
@@ -255,6 +242,10 @@ button:hover .arrow-icon {
 
 .menu-item:hover { 
     background: rgba(0,0,0,0.05); 
+}
+
+.menu-item.hidden {
+    display: none !important;
 }
 
 /* ===== منطقة التطبيق ===== */
@@ -451,7 +442,7 @@ button:hover .arrow-icon {
     border-radius: 8px; 
     padding: 0.8rem; 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
     gap: 0.5rem; 
 }
 
@@ -565,7 +556,7 @@ button:hover .arrow-icon {
     background: rgba(13, 92, 58, 0.03);
 }
 
-/* ===== شريط الصعوبة ===== */
+/* ===== شريط الصعوبة (مع عكس الألوان) ===== */
 .difficulty-header { 
     display: flex; 
     justify-content: space-between; 
@@ -593,8 +584,9 @@ button:hover .arrow-icon {
     appearance: none; 
     width: 100%; 
     height: 10px; 
-    border-radius: 8px; 
-    background: linear-gradient(to right, #16a34a 0%, #d97706 50%, #dc2626 100%); 
+    border-radius: 8px;
+    /* ألوان معكوسة: أحمر يسار (صعب) ← أخضر يمين (سهل) */
+    background: linear-gradient(to right, #dc2626 0%, #d97706 50%, #16a34a 100%);
     outline: none; 
     cursor: pointer; 
 }

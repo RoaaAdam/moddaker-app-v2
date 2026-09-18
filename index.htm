@@ -9,24 +9,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0d9488">
-    <style>
-        /* إخفاء شعار Netlify نهائياً */
-        div[data-netlify-badge],
-        .netlify-badge,
-        img[src*="netlify-badge"],
-        iframe[src*="netlify"],
-        footer,
-        .footer,
-        [class*="netlify"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            width: 0 !important;
-            position: absolute !important;
-            z-index: -9999 !important;
-        }
-    </style>
 </head>
 <body>
 
@@ -50,9 +32,6 @@
                         <span id="user-display-name" class="user-name">زائر</span>
                         <span id="total-score-badge" class="user-score">
                             <i class="fa-solid fa-trophy"></i> النقاط: <span id="user-points-count" class="en-number">0</span>
-                            <span id="login-indicator" class="login-indicator" title="تسجيل الدخول">
-                                <i class="fa-solid fa-circle-user"></i>
-                            </span>
                         </span>
                     </div>
                 </div>
@@ -60,6 +39,11 @@
                 <hr class="menu-divider">
 
                 <ul class="menu-items">
+                    <!-- أيقونة تسجيل الدخول (تظهر فقط للزائر) -->
+                    <li id="login-menu-item" class="menu-item">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>تسجيل الدخول</span>
+                    </li>
                     <li id="theme-toggle" class="menu-item">
                         <i id="theme-icon" class="fa-solid fa-moon"></i>
                         <span id="theme-text">الوضع الليلي</span>
@@ -193,6 +177,14 @@
                         <input type="checkbox" value="next_prev_surah" class="quiz-type custom-checkbox" checked>
                         <span>6. السورة التالية/السابقة</span>
                     </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" value="quran_quiz" class="quiz-type custom-checkbox" checked>
+                        <span>11. تخمين السورة</span>
+                    </label>
+                    <label class="checkbox-card">
+                        <input type="checkbox" value="islamic_api" class="quiz-type custom-checkbox" checked>
+                        <span>12. أسئلة شرعية</span>
+                    </label>
                 </div>
             </div>
 
@@ -240,10 +232,7 @@
             </div>
 
             <div class="actions">
-                <button id="back-to-step1-btn" class="btn-secondary">
-                    <i class="fa-solid fa-arrow-right arrow-icon"></i> الرجوع
-                </button>
-                <button id="start-btn" class="btn-primary">
+                <button id="start-btn" class="btn-primary" style="width:100%;">
                     ابدأ الاختبار الآن <i class="fa-solid fa-play icon-margin"></i>
                 </button>
             </div>
@@ -299,6 +288,7 @@
                     </button>
                 </div>
                 <div id="errors-container" class="errors-list hidden"></div>
+            </div>
         </section>
 
     </main>
@@ -356,6 +346,21 @@
                     <button type="button" id="cancel-feedback-btn" class="btn-secondary">إلغاء</button>
                     <button type="submit" class="btn-primary">إرسال</button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تسجيل الدخول المصغرة -->
+    <div id="login-modal" class="modal-backdrop hidden">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</h3>
+                <button id="close-login-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <form id="login-modal-form" class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" id="login-modal-name" placeholder="اسم المستخدم..." class="input-styled" required>
+                <input type="email" id="login-modal-email" placeholder="البريد الإلكتروني..." class="input-styled" required>
+                <button type="submit" class="btn-primary" style="width:100%;">تسجيل الدخول</button>
             </form>
         </div>
     </div>
