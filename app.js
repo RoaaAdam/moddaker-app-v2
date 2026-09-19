@@ -606,7 +606,7 @@ async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
                     const wrongSurahs = getRandomSurahs(surahNumber + 1, 3);
                     question = {
                         badge: "5. ترتيب السور",
-                        title: `ما هي السورة التي تأتي بعد سورة ${ayah.surahName}؟`,
+                        title: `ما هي السورة التي تأتي بعد  ${ayah.surahName}؟`,
                         promptHtml: `سورة ${ayah.surahName}`,
                         correctAnswer: nextSurah.name,
                         options: shuffleArray([nextSurah.name, ...wrongSurahs]),
@@ -620,7 +620,7 @@ async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
                     const wrongSurahs = getRandomSurahs(surahNumber - 1, 3);
                     question = {
                         badge: "5. ترتيب السور",
-                        title: `ما هي السورة التي تأتي قبل سورة ${ayah.surahName}؟`,
+                        title: `ما هي السورة التي تأتي قبل  ${ayah.surahName}؟`,
                         promptHtml: `سورة ${ayah.surahName}`,
                         correctAnswer: prevSurah.name,
                         options: shuffleArray([prevSurah.name, ...wrongSurahs]),
@@ -660,7 +660,7 @@ async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
                 const wrongTypes = correctType === "مكية" ? ["مدنية"] : ["مكية"];
                 question = {
                     badge: "7. مكي/مدني",
-                    title: `هل سورة ${ayah.surahName} مكية أم مدنية؟`,
+                    title: `هل  ${ayah.surahName} مكية أم مدنية؟`,
                     promptHtml: `سورة ${ayah.surahName}`,
                     correctAnswer: correctType,
                     options: shuffleArray([correctType, ...wrongTypes]),
