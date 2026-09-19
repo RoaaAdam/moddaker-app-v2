@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moddaker-v3';
+const CACHE_NAME = 'moddaker-v4';
 const ASSETS_TO_CACHE = [
     './',
     './index.htm',
