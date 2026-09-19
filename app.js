@@ -285,7 +285,47 @@ const quranData = {
 };
 
 // ==========================================
-// 2. دوال مساعدة
+// 2. دوال جلب بيانات المصحف (خارج DOMContentLoaded)
+// ==========================================
+async function fetchSurahsList() {
+    const cachedSurahs = localStorage.getItem("mudakkir_cached_surahs");
+    if (cachedSurahs) {
+        return JSON.parse(cachedSurahs);
+    }
+
+    try {
+        const res = await fetch("https://api.alquran.cloud/v1/surah");
+        const data = await res.json();
+        if (data.code === 200) {
+            localStorage.setItem("mudakkir_cached_surahs", JSON.stringify(data.data));
+            return data.data;
+        }
+    } catch (err) {
+        console.error("خطأ في جلب السور:", err);
+    }
+    return [];
+}
+
+async function fetchSurahDetail(surahNum) {
+    const cacheKey = `mudakkir_surah_detail_${surahNum}`;
+    const cachedDetail = localStorage.getItem(cacheKey);
+    if (cachedDetail) return JSON.parse(cachedDetail);
+
+    try {
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}`);
+        const data = await res.json();
+        if (data.code === 200) {
+            localStorage.setItem(cacheKey, JSON.stringify(data.data));
+            return data.data;
+        }
+    } catch (e) {
+        console.error(`خطأ في جلب السورة ${surahNum}:`, e);
+    }
+    return null;
+}
+
+// ==========================================
+// 3. دوال مساعدة
 // ==========================================
 function shuffleArray(array) {
     const arr = [...array];
@@ -423,7 +463,7 @@ function extractSurahNumbers(scopes) {
 }
 
 // ==========================================
-// 3. توليد الأسئلة الذكي (الخوارزمية الأساسية)
+// 4. توليد الأسئلة الذكي
 // ==========================================
 async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
     const questions = [];
@@ -705,7 +745,7 @@ async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
 }
 
 // ==========================================
-// 4. التطبيق الرئيسي
+// 5. التطبيق الرئيسي
 // ==========================================
 const isFirstVisit = localStorage.getItem("mudakkir_onboarding_shown") === null;
 
@@ -828,7 +868,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let quizStartTime = null;
     let timerIntervalId = null;
     let timeLeft = 0;
-    let usedQuestionKeys = new Set();
 
     let currentUser = localStorage.getItem("mudakkir_user") || "زائر";
     let currentUserEmail = localStorage.getItem("mudakkir_email") || "";
@@ -877,7 +916,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (step1) step1.classList.add("hidden");
         if (step2) step2.classList.remove("hidden");
-        if (allSurahs.length === 0) fetchSurahsList();
+        if (allSurahs.length === 0) loadSurahsAndRender();
     }
 
     // --- تسجيل الدخول ---
@@ -994,43 +1033,11 @@ ${details}
         });
     }
 
-    // --- جلب بيانات المصحف ---
-    async function fetchSurahsList() {
-        const cachedSurahs = localStorage.getItem("mudakkir_cached_surahs");
-        if (cachedSurahs) {
-            allSurahs = JSON.parse(cachedSurahs);
-            renderScopeItems();
-            return;
-        }
-
+    // --- جلب السور وعرضها ---
+    async function loadSurahsAndRender() {
         if (scopeContainer) scopeContainer.innerHTML = "<p class='loading-text'>⏳ جاري تحميل بيانات المصحف الشريف...</p>";
-        try {
-            const res = await fetch("https://api.alquran.cloud/v1/surah");
-            const data = await res.json();
-            if (data.code === 200) {
-                allSurahs = data.data;
-                localStorage.setItem("mudakkir_cached_surahs", JSON.stringify(allSurahs));
-                renderScopeItems();
-            }
-        } catch (err) {
-            if (scopeContainer) scopeContainer.innerHTML = "<p style='color:red;'>تعذر جلب البيانات. تحقق من اتصال الإنترنِت.</p>";
-        }
-    }
-
-    async function fetchSurahDetail(surahNum) {
-        const cacheKey = `mudakkir_surah_detail_${surahNum}`;
-        const cachedDetail = localStorage.getItem(cacheKey);
-        if (cachedDetail) return JSON.parse(cachedDetail);
-
-        try {
-            const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}`);
-            const data = await res.json();
-            if (data.code === 200) {
-                localStorage.setItem(cacheKey, JSON.stringify(data.data));
-                return data.data;
-            }
-        } catch (e) {}
-        return null;
+        allSurahs = await fetchSurahsList();
+        renderScopeItems();
     }
 
     // --- التنقل ---
@@ -1191,7 +1198,6 @@ ${details}
             currentQuestionIndex = 0;
             userScore = 0;
             userAnswersLog = [];
-            usedQuestionKeys = new Set();
             if (timerIntervalId) {
                 clearInterval(timerIntervalId);
                 timerIntervalId = null;
@@ -1271,8 +1277,6 @@ ${details}
 
             try {
                 const targetSurahNumbers = extractSurahNumbers(selectedScopes);
-                
-                // استخدام الخوارزمية الأساسية فقط
                 generatedQuestions = await buildSmartQuestions(targetSurahNumbers, finalCount, selectedTypes);
 
                 if (generatedQuestions.length === 0) {
@@ -1284,7 +1288,6 @@ ${details}
                 currentQuestionIndex = 0;
                 userScore = 0;
                 userAnswersLog = [];
-                usedQuestionKeys = new Set();
                 quizStartTime = new Date();
 
                 resetStartButton();
@@ -1293,6 +1296,7 @@ ${details}
 
                 showQuestion(currentQuestionIndex);
             } catch (err) {
+                console.error("❌ تفاصيل الخطأ:", err);
                 alert("حدث خطأ أثناء تحميل الأسئلة: " + err.message);
                 resetStartButton();
             }
@@ -1549,12 +1553,12 @@ ${details}
     function goToStep2() {
         if (step1) step1.classList.add("hidden");
         if (step2) step2.classList.remove("hidden");
-        if (allSurahs.length === 0) fetchSurahsList();
+        if (allSurahs.length === 0) loadSurahsAndRender();
     }
 
     if (!isFirstVisit) {
         setTimeout(() => {
-            if (allSurahs.length === 0) fetchSurahsList();
+            if (allSurahs.length === 0) loadSurahsAndRender();
         }, 100);
     }
 
