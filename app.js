@@ -1,17 +1,5 @@
-// بدل ما تستخدم Firebase، استخدم LocalStorage فقط
-function loadUserData() {
-    currentUser = localStorage.getItem("mudakkir_user") || "زائر";
-    currentUserEmail = localStorage.getItem("mudakkir_email") || "";
-    userPoints = parseInt(localStorage.getItem(`mudakkir_points_${currentUser}`)) || 0;
-    quizHistory = JSON.parse(localStorage.getItem(`mudakkir_history_${currentUser}`)) || [];
-}
 // ==========================================
-// 2. استيراد دوال الدمج (من الملف الجديد)
-// ==========================================
-// import { getCombinedQuestions, getQuranQuizQuestions, getIslamicQuestions } from './questions-integration.js';
-
-// ==========================================
-// 3. بيانات القرآن الأساسية
+// 1. بيانات القرآن الأساسية
 // ==========================================
 const quranData = {
     surahInfo: {
@@ -297,7 +285,7 @@ const quranData = {
 };
 
 // ==========================================
-// 4. دوال مساعدة
+// 2. دوال مساعدة
 // ==========================================
 function shuffleArray(array) {
     const arr = [...array];
@@ -435,7 +423,7 @@ function extractSurahNumbers(scopes) {
 }
 
 // ==========================================
-// 5. توليد الأسئلة الذكي (الخوارزمية الأساسية)
+// 3. توليد الأسئلة الذكي (الخوارزمية الأساسية)
 // ==========================================
 async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
     const questions = [];
@@ -717,58 +705,7 @@ async function buildSmartQuestions(surahNumbers, totalCount, allowedTypes) {
 }
 
 // ==========================================
-// 6. توليد الأسئلة من جميع المصادر
-// ==========================================
-async function generateAllQuestions(surahNumbers, totalCount, selectedTypes) {
-    let allQuestions = [];
-    let usedKeysSet = new Set();
-    
-    // 1. الخوارزمية الأساسية
-    const basicQuestions = await buildSmartQuestions(surahNumbers, Math.floor(totalCount * 0.5), selectedTypes);
-    allQuestions = [...allQuestions, ...basicQuestions];
-    
-    // 2. quran-quiz (تخمين السورة والآية)
-    if (selectedTypes.includes('quran_quiz')) {
-        try {
-            const quranQuizQuestions = await getQuranQuizQuestions(
-                Math.floor(totalCount * 0.25),
-                'surah',
-                surahNumbers
-            );
-            allQuestions = [...allQuestions, ...quranQuizQuestions];
-        } catch (e) {
-            console.log('quran-quiz غير متاح، نكمل بدونها');
-        }
-    }
-    
-    // 3. IslamicQuizAPI (أسئلة شرعية)
-    if (selectedTypes.includes('islamic_api')) {
-        try {
-            const islamicQuestions = await getIslamicQuestions(
-                Math.floor(totalCount * 0.25)
-            );
-            allQuestions = [...allQuestions, ...islamicQuestions];
-        } catch (e) {
-            console.log('IslamicQuizAPI غير متاح، نكمل بدونها');
-        }
-    }
-    
-    // إزالة المكررات
-    const uniqueQuestions = [];
-    const uniqueSet = new Set();
-    for (const q of allQuestions) {
-        const key = q.uniqueKey || q.title;
-        if (!uniqueSet.has(key)) {
-            uniqueSet.add(key);
-            uniqueQuestions.push(q);
-        }
-    }
-    
-    return shuffleArray(uniqueQuestions).slice(0, totalCount);
-}
-
-// ==========================================
-// 7. بقية التطبيق (DOM, الأزرار, إلخ)
+// 4. التطبيق الرئيسي
 // ==========================================
 const isFirstVisit = localStorage.getItem("mudakkir_onboarding_shown") === null;
 
@@ -915,50 +852,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     updateClearHistoryButton();
 
-    async function loadUserDataFromCloud(email) {
-        if (!email || !db) return;
-        try {
-            const userDoc = await db.collection("users").doc(email.toLowerCase()).get();
-            if (userDoc.exists) {
-                const data = userDoc.data();
-                currentUser = data.name || currentUser;
-                userPoints = data.points || 0;
-                quizHistory = data.history || [];
-                saveUserData(false);
-                updateUserDataUI();
-                updateClearHistoryButton();
-            } else {
-                saveUserData(true);
-            }
-        } catch (error) {
-            console.error("خطأ في جلب البيانات السحابية:", error);
-        }
-    }
-
-    function saveUserData(syncToCloud = true) {
+    function saveUserData() {
         localStorage.setItem("mudakkir_user", currentUser);
         localStorage.setItem("mudakkir_email", currentUserEmail);
         localStorage.setItem(`mudakkir_points_${currentUser}`, userPoints);
         localStorage.setItem(`mudakkir_history_${currentUser}`, JSON.stringify(quizHistory));
         updateUserDataUI();
         updateClearHistoryButton();
-
-        if (syncToCloud && currentUserEmail && db) {
-            db.collection("users").doc(currentUserEmail.toLowerCase()).set({
-                name: currentUser,
-                email: currentUserEmail,
-                points: userPoints,
-                history: quizHistory,
-                lastLogin: new Date()
-            }, { merge: true }).catch(err => console.error("خطأ في الحفظ السحابي:", err));
-        }
     }
 
     function handleLogin(nameVal, emailVal) {
         if (!nameVal) return;
         currentUser = nameVal;
         currentUserEmail = emailVal || "";
-        if (emailVal) loadUserDataFromCloud(emailVal);
         saveUserData();
 
         if (loginFormBox) {
@@ -1366,8 +1272,8 @@ ${details}
             try {
                 const targetSurahNumbers = extractSurahNumbers(selectedScopes);
                 
-                // استخدام الدمج الشامل
-                generatedQuestions = await generateAllQuestions(targetSurahNumbers, finalCount, selectedTypes);
+                // استخدام الخوارزمية الأساسية فقط
+                generatedQuestions = await buildSmartQuestions(targetSurahNumbers, finalCount, selectedTypes);
 
                 if (generatedQuestions.length === 0) {
                     alert("تعذر توليد أسئلة. حاول مرة أخرى.");
