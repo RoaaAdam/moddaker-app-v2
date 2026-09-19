@@ -367,6 +367,25 @@
 
 
     <!-- ملف التطبيق -->
+  
     <script src="app.js"></script>
+    <script>
+        // تحديث Service Worker تلقائياً
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                registration.addEventListener('updatefound', function() {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // نسخة جديدة متاحة
+                            if (confirm('تم تحديث التطبيق! هل تريد إعادة التحميل الآن؟')) {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                });
+            });
+        }
+    </script>
 </body>
 </html>
