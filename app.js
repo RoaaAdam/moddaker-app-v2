@@ -1618,4 +1618,41 @@ ${details}
         });
     }, 500);
 
+// ==========================================
+// إخفاء شعار Netlify نهائياً
+// ==========================================
+function hideNetlifyBadge() {
+    // إخفاء أي عنصر فيه "netlify"
+    const allElements = document.querySelectorAll('*');
+    allElements.forEach(el => {
+        const id = el.id || '';
+        const className = el.className || '';
+        const href = el.href || '';
+        
+        if (id.toLowerCase().includes('netlify') ||
+            className.toString().toLowerCase().includes('netlify') ||
+            href.toLowerCase().includes('netlify')) {
+            el.style.display = 'none';
+            el.style.visibility = 'hidden';
+            el.style.opacity = '0';
+            el.style.height = '0';
+            el.style.width = '0';
+            el.style.position = 'absolute';
+            el.style.zIndex = '-9999';
+        }
+    });
+}
+
+// تنفيذ فوري
+hideNetlifyBadge();
+
+// تنفيذ متكرر لمدة 5 ثواني (لو Netlify أضافه متأخراً)
+let netlifyCheckCount = 0;
+const netlifyInterval = setInterval(() => {
+    hideNetlifyBadge();
+    netlifyCheckCount++;
+    if (netlifyCheckCount >= 10) {
+        clearInterval(netlifyInterval);
+    }
+}, 500);
 });
